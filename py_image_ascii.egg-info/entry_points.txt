@@ -1,3 +1,0 @@
-[console_scripts]
-img2ascii = py_image_ascii.cli:main
-

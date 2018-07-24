@@ -65,7 +65,7 @@ def transform_image(
     return "\n".join("".join(row) for row in result)
 
 
-def transform_animation(image: Image) -> typing.Iterator[str]:
+def transform_animation(image: Image, ramp) -> typing.Iterator[str]:
     if not image.is_animated:
         raise ValueError("Image must be an animated gif")
 
@@ -76,17 +76,17 @@ def transform_animation(image: Image) -> typing.Iterator[str]:
         import pdb
 
         pdb.set_trace()
-        result = transform_image(image)
+        result = transform_image(image, ramp=ramp)
         tmp.append(result)
 
     for frame in tmp:
         yield frame
 
 
-def _handle_animation_mix(image: Image):
+def _handle_animation_mix(image: Image, ramp):
     if image.is_animated:
-        return transform_animation(image)
-    return transform_image(image)
+        return transform_animation(image, ramp)
+    return transform_image(image, ramp)
 
 
 IMAGE_FORMAT_MAP = {
@@ -96,5 +96,5 @@ IMAGE_FORMAT_MAP = {
 }
 
 
-def transform(image: Image) -> typing.Union[str, typing.Iterator[str]]:
-    return IMAGE_FORMAT_MAP[image.format](image)
+def transform(image: Image, ramp) -> typing.Union[str, typing.Iterator[str]]:
+    return IMAGE_FORMAT_MAP[image.format](image, ramp=ramp)
